@@ -21,6 +21,9 @@ const alertsRoutes = require('./src/routes/alerts');
 // Inicializar aplicação Express
 const app = express();
 
+// Configurar trust proxy para funcionar com o Nginx
+app.set('trust proxy', 1);
+
 // Configurar middlewares
 app.use(helmet());
 app.use(compression());
@@ -36,7 +39,9 @@ app.use(morgan('combined'));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 100, // limite de 100 requisições por IP
-  message: 'Muitas requisições deste IP, tente novamente mais tarde.'
+  message: 'Muitas requisições deste IP, tente novamente mais tarde.',
+  standardHeaders: true, // Retorna informações de rate limit nos headers
+  legacyHeaders: false, // Desativa os headers legados
 });
 app.use('/api/', limiter);
 
