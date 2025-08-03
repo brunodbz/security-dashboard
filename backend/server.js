@@ -40,6 +40,15 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// Rota de saúde para teste de conexão
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    message: 'Backend is running'
+  });
+});
+
 // Conectar ao MongoDB
 const connectDB = async () => {
   try {
@@ -63,11 +72,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/alerts', alertsRoutes);
-
-// Rota de saúde para verificar se o servidor está funcionando
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
 
 // Servir arquivos estáticos em produção
 if (process.env.NODE_ENV === 'production') {

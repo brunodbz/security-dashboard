@@ -1,8 +1,36 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
-  # Banco de dados MongoDB
+  backend:
+    build: ./backend
+    container_name: security-dashboard-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MONGO_URI: mongodb://admin:password@mongodb:27017/security_dashboard?authSource=admin
+      JWT_SECRET: your_jwt_secret_key_here
+      JWT_EXPIRES_IN: 24h
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - security-network
+
+  frontend:
+    build: ./frontend
+    container_name: security-dashboard-frontend
+    restart: unless-stopped
+    environment:
+      REACT_APP_API_URL: http://backend:3000/api
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - security-network
+
   mongodb:
     image: mongo:5.0
     container_name: security-dashboard-db
@@ -15,42 +43,6 @@ services:
       - mongodb_data:/data/db
     ports:
       - "27017:27017"
-    networks:
-      - security-network
-
-  # Backend Node.js
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: security-dashboard-backend
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      MONGO_URI: mongodb://admin:password@mongodb:27017/security_dashboard?authSource=admin
-      JWT_SECRET: your_jwt_secret_key_here
-      JWT_EXPIRES_IN: 24h
-      TELEGRAM_BOT_TOKEN: your_telegram_bot_token
-      TELEGRAM_CHAT_ID: your_telegram_chat_id
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongodb
-    networks:
-      - security-network
-
-  # Frontend React
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: security-dashboard-frontend
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
     networks:
       - security-network
 

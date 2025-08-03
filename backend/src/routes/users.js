@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { auth, authorize } = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
+const { authorize } = require('../middleware/authorize');
 
 // Admin pode cadastrar usuários
 router.post('/', auth, authorize(['admin']), async (req, res) => {

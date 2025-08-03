@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+// Detectar se estamos em ambiente de desenvolvimento local ou Docker
+const getApiUrl = () => {
+  // Se estiver rodando no Docker, usa o nome do serviço
+  if (window.location.hostname === 'localhost' && window.location.port === '') {
+    return 'http://backend:3000/api';
+  }
+  // Para desenvolvimento local fora do Docker
+  return process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+};
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://backend:3000/api',
+  baseURL: getApiUrl(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
