@@ -6,7 +6,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN apk add --no-cache python3 make g++ \
     && npm install -g npm@9 \
-    && npm install $(cat requirements.txt | tr '\n' ' ') \
+    && npm install $(grep -v "^#" requirements.txt | tr '\n' ' ') \
     && apk del python3 make g++
 
 # Copia o restante dos arquivos
