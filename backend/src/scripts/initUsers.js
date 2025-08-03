@@ -29,19 +29,19 @@ const createUsers = async () => {
     const users = [
       {
         username: 'admin',
-        password: await bcrypt.hash('admin123', 10),
+        password: 'admin123',
         role: 'admin',
         active: true
       },
       {
         username: 'gestor',
-        password: await bcrypt.hash('gestor123', 10),
+        password: 'gestor123',
         role: 'gestor',
         active: true
       },
       {
         username: 'analista',
-        password: await bcrypt.hash('analista123', 10),
+        password: 'analista123',
         role: 'analista',
         active: true
       }
