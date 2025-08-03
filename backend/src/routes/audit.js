@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const AuditLog = require('../models/AuditLog');
-const { auth, authorize } = require('../middleware/auth');
+const { auth, authorize } = require('../middleware/authMiddleware');
 
 // Obter logs de auditoria com filtros e paginação
 router.get('/', auth, authorize(['admin', 'gestor']), async (req, res) => {

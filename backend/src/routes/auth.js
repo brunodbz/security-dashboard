@@ -12,18 +12,18 @@ router.post('/login', async (req, res) => {
     // Verificar se o usuário existe
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ success: false, error: 'Credenciais inválidas' });
     }
     
     // Verificar se o usuário está ativo
     if (!user.active) {
-      return res.status(401).json({ error: 'Usuário desativado' });
+      return res.status(401).json({ success: false, error: 'Usuário desativado' });
     }
     
     // Verificar a senha
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ success: false, error: 'Credenciais inválidas' });
     }
     
     // Gerar token JWT
@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -64,7 +64,7 @@ router.post('/logout', async (req, res) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
-      return res.status(401).json({ error: 'Token não fornecido' });
+      return res.status(401).json({ success: false, error: 'Token não fornecido' });
     }
     
     // Registrar no log de auditoria
@@ -77,7 +77,7 @@ router.post('/logout', async (req, res) => {
     
     res.json({ success: true, message: 'Logout realizado com sucesso' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
