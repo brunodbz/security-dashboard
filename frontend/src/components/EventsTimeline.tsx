@@ -1,11 +1,23 @@
 import React from 'react';
 import { SecurityEvent } from '../types';
 import { formatDateTime } from '../utils/dateUtils';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 
 interface EventsTimelineProps {
   events: SecurityEvent[];
 }
+
+const CustomTooltip: React.FC<TooltipProps<any, any>> = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-4 border border-gray-200 shadow-lg rounded-md">
+        <p className="font-medium">{`Evento: ${label}`}</p>
+        <p className="text-sm">{`Descrição: ${payload[0].payload.description}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 const EventsTimeline: React.FC<EventsTimelineProps> = ({ events }) => {
   // Preparar dados para o gráfico
@@ -15,16 +27,6 @@ const EventsTimeline: React.FC<EventsTimelineProps> = ({ events }) => {
     severity: event.severity,
     description: event.description
   }));
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return '#EF4444';
-      case 'high': return '#F97316';
-      case 'medium': return '#F59E0B';
-      case 'low': return '#10B981';
-      default: return '#6B7280';
-    }
-  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow">
@@ -44,10 +46,7 @@ const EventsTimeline: React.FC<EventsTimelineProps> = ({ events }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis type="number" />
             <YAxis dataKey="name" type="category" width={150} />
-            <Tooltip 
-              formatter={(value, name, props) => [props.payload.description, 'Descrição']}
-              labelFormatter={(label) => `Evento: ${label}`}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="timestamp" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>

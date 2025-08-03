@@ -1,6 +1,6 @@
 // frontend/src/components/RealTimeAlerts.tsx
 import React, { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import api from '../services/api';
 import { formatDateTime } from '../utils/dateUtils';
 
 interface Alert {

@@ -1,22 +1,11 @@
 // frontend/src/components/AuditLogTable.tsx
 import React, { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import api from '../services/api';
 import { formatDateTime } from '../utils/dateUtils';
-import { Tooltip } from './Tooltip';
+import Tooltip from './Tooltip';
+import { AuditLog } from '../types';
 
-interface AuditLog {
-  id: string;
-  userId: {
-    _id: string;
-    username: string;
-    role: string;
-  };
-  action: string;
-  details: string;
-  timestamp: Date;
-}
-
-const AuditLogTable: React.FC = () => {
+  const AuditLogTable: React.FC = () => {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { User } from '../types';
-import { formatDateTime } from '../utils/dateUtils';
 
-const UserManagement: React.FC = () => {
+  const UserManagement: React.FC = () => {
   const { user, logout } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SecurityEvent } from '../types';
 import { formatDateTime } from '../utils/dateUtils';
-import { Tooltip } from './Tooltip';
+import Tooltip from './Tooltip';
 
 interface EventsTableProps {
   title: string;
@@ -10,7 +10,7 @@ interface EventsTableProps {
   showAll?: boolean;
 }
 
-const EventsTable: React.FC<EventsTableProps> = ({ title, events, showAll = false }) => {
+  const EventsTable: React.FC<EventsTableProps> = ({ title, events, showAll = false }) => {
   const [sortField, setSortField] = useState<keyof SecurityEvent>('timestamp');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filter, setFilter] = useState('');
