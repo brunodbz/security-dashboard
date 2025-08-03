@@ -24,7 +24,10 @@ const app = express();
 // Configurar middlewares
 app.use(helmet());
 app.use(compression());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost', 'http://localhost:3000', 'http://frontend:80'],
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'));
@@ -60,6 +63,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/alerts', alertsRoutes);
+
+// Rota de saúde para verificar se o servidor está funcionando
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
 
 // Servir arquivos estáticos em produção
 if (process.env.NODE_ENV === 'production') {

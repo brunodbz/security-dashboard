@@ -55,7 +55,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Erro no login:', error.response?.data || error.message);
       return false;
     }
   };
@@ -74,3 +75,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;

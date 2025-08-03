@@ -1,4 +1,3 @@
-// frontend/src/pages/Login.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -17,15 +16,19 @@ const Login: React.FC = () => {
     setIsLoading(true);
     setError('');
     
-    const success = await login(username, password);
-    
-    if (success) {
-      navigate('/dashboard');
-    } else {
-      setError('Credenciais inválidas');
+    try {
+      const success = await login(username, password);
+      
+      if (success) {
+        navigate('/dashboard');
+      } else {
+        setError('Credenciais inválidas');
+      }
+    } catch (err) {
+      setError('Erro ao tentar fazer login. Tente novamente.');
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
