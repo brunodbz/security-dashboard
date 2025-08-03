@@ -9,6 +9,8 @@ Um dashboard completo de segurança corporativa desenvolvido para áreas de gest
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação e Configuração](#instalação-e-configuração)
+  - [Instalação via Docker Compose](#instalação-via-docker-compose)
+  - [Instalação via Docker com requirements.txt](#instalação-via-docker-com-requirementstxt)
 - [Uso](#uso)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Integrações](#integrações)
@@ -16,6 +18,7 @@ Um dashboard completo de segurança corporativa desenvolvido para áreas de gest
 - [Credenciais de Demonstração](#credenciais-de-demonstração)
 - [Contribuição](#contribuição)
 - [Licença](#licença)
+- [Suporte](#suporte)
 
 ## 🌟 Visão Geral
 
@@ -133,7 +136,9 @@ DEFENDER_CLIENT_SECRET=your_defender_client_secret
 REACT_APP_API_URL=http://localhost:3000/api
 ```
 
-### 3. Executar com Docker Compose
+### Instalação via Docker Compose
+
+Execute o comando abaixo para iniciar todos os serviços:
 
 ```bash
 docker-compose up -d
@@ -144,7 +149,87 @@ Isso irá iniciar:
 - Backend Node.js
 - Frontend React com Nginx
 
-### 4. Acessar o aplicativo
+### Instalação via Docker com requirements.txt
+
+O projeto agora suporta instalação de dependências através de arquivos `requirements.txt` para ambos frontend e backend.
+
+#### Backend requirements.txt
+
+O arquivo `backend/requirements.txt` lista todas as dependências do servidor Node.js:
+
+```txt
+# Dependências do Backend
+express@^4.18.2
+mongoose@^7.0.3
+bcryptjs@^2.4.3
+jsonwebtoken@^9.0.0
+cors@^2.8.5
+dotenv@^16.0.3
+axios@^1.4.0
+@elastic/elasticsearch@^8.7.0
+multer@^1.4.5-lts.1
+helmet@^6.1.5
+express-rate-limit@^6.7.0
+compression@^1.7.4
+morgan@^1.10.0
+joi@^17.9.2
+nodemailer@^6.9.3
+socket.io@^4.7.1
+```
+
+#### Frontend requirements.txt
+
+O arquivo `frontend/requirements.txt` lista todas as dependências do frontend React:
+
+```txt
+# Dependências do Frontend
+react@^18.2.0
+react-dom@^18.2.0
+react-router-dom@^6.11.2
+axios@^1.4.0
+recharts@^2.6.2
+tailwindcss@^3.3.2
+@types/react@^18.2.14
+@types/react-dom@^18.2.6
+typescript@^5.1.3
+@types/node@^20.3.1
+```
+
+#### Como usar
+
+1. Certifique-se de que os arquivos `requirements.txt` estão presentes nas pastas `backend` e `frontend`
+
+2. Execute o Docker Compose:
+
+```bash
+docker-compose up -d --build
+```
+
+O processo de build irá:
+- Ler os arquivos `requirements.txt`
+- Instalar automaticamente todas as dependências listadas
+- Construir as imagens do Docker com todas as dependências necessárias
+
+#### Adicionando novas dependências
+
+Para adicionar novas dependências ao projeto:
+
+1. Adicione o pacote ao arquivo `requirements.txt` correspondente (backend ou frontend)
+2. Reconstrua as imagens do Docker:
+
+```bash
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+#### Vantagens desta abordagem
+
+- **Gestão simplificada de dependências**: Todas as dependências estão listadas em um único arquivo por componente
+- **Builds reproduzíveis**: Garante que as mesmas versões de dependências sejam instaladas em todos os ambientes
+- **Facilidade de auditoria**: Fácil visualização de todas as dependências do projeto
+- **Builds mais eficientes**: O Docker instala apenas as dependências listadas, reduzindo o tamanho da imagem
+
+### 3. Acessar o aplicativo
 
 Abra seu navegador e acesse: `http://localhost`
 
@@ -195,6 +280,7 @@ security-dashboard/
 │   │   ├── routes/          # Rotas da API
 │   │   ├── services/        # Serviços de integração
 │   │   └── utils/           # Utilitários
+│   ├── requirements.txt     # Dependências do backend
 │   ├── .env.example         # Exemplo de variáveis de ambiente
 │   ├── Dockerfile           # Configuração do Docker para o backend
 │   ├── package.json         # Dependências do backend
@@ -209,10 +295,13 @@ security-dashboard/
 │   │   ├── services/        # Serviços de API
 │   │   ├── types/           # Definições de tipos TypeScript
 │   │   └── utils/           # Utilitários
+│   ├── requirements.txt     # Dependências do frontend
 │   ├── Dockerfile           # Configuração do Docker para o frontend
 │   ├── nginx.conf           # Configuração do Nginx
 │   ├── package.json         # Dependências do frontend
 │   └── tailwind.config.js   # Configuração do Tailwind CSS
+├── scripts/
+│   └── update-requirements.sh  # Script para atualizar requirements.txt
 ├── docker-compose.yml       # Configuração do Docker Compose
 └── README.md                # Este arquivo
 ```
@@ -359,8 +448,6 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou env
 ## 📄 Licença
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
----
 
 ## 📞 Suporte
 
