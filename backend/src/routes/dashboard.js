@@ -1,7 +1,6 @@
-// backend/src/routes/dashboard.js
 const express = require('express');
 const router = express.Router();
-const { auth, authorize } = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const {
   getElasticEvents,
   getTrellixEvents,
@@ -33,16 +32,19 @@ router.get('/', auth, async (req, res) => {
     };
 
     res.json({
-      events: {
-        elastic: elasticEvents.slice(0, 10),
-        trellix: trellixEvents.slice(0, 10),
-        defender: defenderEvents.slice(0, 10),
-        tenable: tenableEvents.slice(0, 10)
-      },
-      indicators
+      success: true,
+      data: {
+        events: {
+          elastic: elasticEvents.slice(0, 10),
+          trellix: trellixEvents.slice(0, 10),
+          defender: defenderEvents.slice(0, 10),
+          tenable: tenableEvents.slice(0, 10)
+        },
+        indicators
+      }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

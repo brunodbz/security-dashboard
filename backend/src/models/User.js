@@ -1,4 +1,3 @@
-// backend/src/models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -11,7 +10,15 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'gestor', 'analista'],
     default: 'analista'
   },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  tokens: [{
+    token: {
+      type: String,
+      required: true
+    }
+  }]
+}, {
+  timestamps: true
 });
 
 userSchema.pre('save', async function(next) {

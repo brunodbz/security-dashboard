@@ -2,15 +2,16 @@ FROM node:16-alpine AS build
 
 WORKDIR /app
 
-# Copia o requirements.txt e instala as dependências
-COPY requirements.txt ./
-RUN apk add --no-cache python3 make g++ \
-    && npm install -g npm@9 \
-    && npm install $(grep -v "^#" requirements.txt | tr '\n' ' ') \
-    && apk del python3 make g++
+# Copia o package.json e package-lock.json
+COPY package*.json ./
 
-# Copia o restante dos arquivos e constrói o projeto
+# Instala as dependências
+RUN npm install
+
+# Copia o restante dos arquivos
 COPY . .
+
+# Constrói o projeto
 RUN npm run build
 
 # Estágio de produção

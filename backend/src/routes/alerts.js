@@ -1,4 +1,3 @@
-// backend/src/routes/alerts.js
 const express = require('express');
 const router = express.Router();
 const { auth } = require('../middleware/auth');
@@ -10,16 +9,23 @@ router.post('/critical', auth, async (req, res) => {
     const { message } = req.body;
     
     // Enviar alerta para o Telegram
-    await sendTelegramAlert(`ALERTA CRÍTICO: ${message}`);
+    const telegramResult = await sendTelegramAlert(`ALERTA CRÍTICO: ${message}`);
     
-    // Em uma implementação real, você também poderia:
-    // 1. Salvar o alerta no banco de dados
-    // 2. Enviar via WebSocket para clientes conectados
-    // 3. Enviar por email ou SMS
+    // Registrar no log de auditoria
+    const AuditLog = require('../models/AuditLog');
+    await new AuditLog({
+      userId: req.user._id,
+      action: 'send_alert',
+      details: `Alerta crítico enviado: ${message}`
+    }).save();
     
-    res.json({ success: true, message: 'Alerta crítico processado' });
+    res.json({ 
+      success: true, 
+      message: 'Alerta crítico processado',
+      telegramSent: telegramResult.success
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

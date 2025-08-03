@@ -1,4 +1,3 @@
-// backend/src/routes/audit.js
 const express = require('express');
 const router = express.Router();
 const AuditLog = require('../models/AuditLog');
@@ -39,12 +38,13 @@ router.get('/', auth, authorize(['admin', 'gestor']), async (req, res) => {
     const total = await AuditLog.countDocuments(filter);
     
     res.json({
+      success: true,
       logs,
       totalPages: Math.ceil(total / limit),
       currentPage: parseInt(page)
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -57,12 +57,20 @@ router.delete('/', auth, authorize(['admin']), async (req, res) => {
     
     const result = await AuditLog.deleteMany({ timestamp: { $lt: cutoffDate } });
     
+    // Registrar no log de auditoria
+    await new AuditLog({
+      userId: req.user._id,
+      action: 'delete_audit_logs',
+      details: `Excluídos ${result.deletedCount} logs de auditoria com mais de ${days} dias`
+    }).save();
+    
     res.json({ 
+      success: true,
       message: `${result.deletedCount} registros de auditoria excluídos`,
       deletedCount: result.deletedCount
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
