@@ -1,13 +1,13 @@
-// frontend/src/pages/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { api } from '../services/api';
-import { SecurityEvent, DashboardData } from '../types';
+import api from '../services/api';
+import { DashboardData } from '../types';
 import IndicatorCard from '../components/IndicatorCard';
 import EventsTable from '../components/EventsTable';
 import VulnerabilityChart from '../components/VulnerabilityChart';
 import EventsTimeline from '../components/EventsTimeline';
 import RealTimeAlerts from '../components/RealTimeAlerts';
+import AuditLogTable from '../components/AuditLogTable';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
     const fetchDashboardData = async () => {
       try {
         const response = await api.get('/dashboard');
-        setDashboardData(response.data);
+        setDashboardData(response.data.data);
       } catch (error) {
         console.error('Erro ao carregar dados do dashboard:', error);
       } finally {
