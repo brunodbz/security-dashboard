@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { auth } = require('../middleware/authMiddleware');
 
 // Rota de login
 router.post('/login', async (req, res) => {
@@ -59,13 +60,12 @@ router.post('/login', async (req, res) => {
 });
 
 // Rota de logout
-router.post('/logout', async (req, res) => {
+router.post('/logout', auth, async (req, res) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) {
-      return res.status(401).json({ success: false, error: 'Token não fornecido' });
-    }
-    
+    // Remover token da lista de tokens do usuário
+    req.user.tokens = req.user.tokens.filter(t => t.token !== req.token);
+    await req.user.save();
+
     // Registrar no log de auditoria
     const AuditLog = require('../models/AuditLog');
     await new AuditLog({
@@ -73,7 +73,7 @@ router.post('/logout', async (req, res) => {
       action: 'logout',
       details: 'Logout realizado'
     }).save();
-    
+
     res.json({ success: true, message: 'Logout realizado com sucesso' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
