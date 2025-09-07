@@ -3,6 +3,32 @@ const router = express.Router();
 const User = require('../models/User');
 const { auth, authorize } = require('../middleware/authMiddleware');
 
+// Criar primeiro usuário administrador sem autenticação
+router.post('/init', async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    if (userCount > 0) {
+      return res.status(400).json({ success: false, error: 'Usuário inicial já existe' });
+    }
+
+    const { username, password } = req.body;
+    const user = new User({ username, password, role: 'admin' });
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Usuário administrador criado com sucesso',
+      user: {
+        id: user._id,
+        username: user.username,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
 // Admin pode cadastrar usuários
 router.post('/', auth, authorize(['admin']), async (req, res) => {
   try {

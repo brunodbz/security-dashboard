@@ -15,7 +15,6 @@ Um dashboard completo de segurança corporativa desenvolvido para áreas de gest
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Integrações](#integrações)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
-- [Credenciais de Demonstração](#credenciais-de-demonstração)
 - [Contribuição](#contribuição)
 - [Licença](#licença)
 - [Suporte](#suporte)
@@ -56,7 +55,7 @@ Com uma interface moderna e responsiva, o sistema oferece diferentes níveis de 
 
 ### Notificações em Tempo Real
 - Alertas críticos exibidos imediatamente na interface
-- Integração simulada com Telegram para envio automático de alertas
+- Integração com Telegram para envio automático de alertas
 - Sistema de notificações visuais com cores diferenciadas por severidade
 
 ### Filtros Avançados
@@ -308,7 +307,7 @@ security-dashboard/
 
 ## 🔌 Integrações
 
-O dashboard foi projetado para se integrar com diversas fontes de dados de segurança. Atualmente, as integrações são simuladas, mas o projeto inclui exemplos de como conectar com APIs reais:
+O dashboard foi projetado para se integrar com diversas fontes de dados de segurança. O projeto inclui exemplos de como conectar com APIs reais:
 
 ### Elastic
 
@@ -425,15 +424,11 @@ const sendTelegramAlert = async (message) => {
 |----------|-----------|---------|
 | REACT_APP_API_URL | URL da API do backend | http://localhost:3000/api |
 
-## 🔑 Credenciais de Demonstração
+## 🔐 Criação do Primeiro Usuário
 
-O sistema vem com usuários pré-configurados para demonstração:
-
-| Perfil | Usuário | Senha |
-|--------|---------|-------|
-| Admin | admin | admin123 |
-| Gestor | gestor | gestor123 |
-| Analista | analista | analista123 |
+Após iniciar o backend, crie o usuário administrador inicial enviando uma requisição
+`POST` para `/api/users/init` com `username` e `password`. Essa rota só pode ser utilizada
+uma vez e atribui automaticamente o perfil de administrador ao primeiro usuário.
 
 ## 🤝 Contribuição
 
