@@ -76,9 +76,6 @@ const Login: React.FC = () => {
           </button>
         </form>
         
-        <div className="mt-4 text-sm text-gray-600 text-center">
-          <p>Demo: admin/admin123, gestor/gestor123, analista/analista123</p>
-        </div>
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ import IndicatorCard from '../components/IndicatorCard';
 import EventsTable from '../components/EventsTable';
 import VulnerabilityChart from '../components/VulnerabilityChart';
 import EventsTimeline from '../components/EventsTimeline';
-import RealTimeAlerts from '../components/RealTimeAlerts';
 import AuditLogTable from '../components/AuditLogTable';
 
 const Dashboard: React.FC = () => {
@@ -82,9 +81,6 @@ const Dashboard: React.FC = () => {
             ))}
           </nav>
         </div>
-
-        {/* Alertas em tempo real */}
-        <RealTimeAlerts />
 
         {/* Conteúdo baseado na aba ativa */}
         {activeTab === 'overview' && dashboardData && (
