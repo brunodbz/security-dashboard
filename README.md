@@ -105,7 +105,7 @@ Com uma interface moderna e responsiva, o sistema oferece diferentes níveis de 
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/security-dashboard.git
+git clone https://github.com/brunodbz/security-dashboard.git
 cd security-dashboard
 ```
 
@@ -453,5 +453,6 @@ Se você tiver alguma dúvida ou encontrar algum problema, por favor:
 3. Crie uma nova issue com detalhes sobre seu problema
 
 ---
+
 
 Desenvolvido com ❤️ para equipes de segurança.
